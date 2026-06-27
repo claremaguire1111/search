@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help Find Gregor — Ogwen Search</title>
+<meta name="description" content="Gregor remains missing in the Ogwen valley, North Wales. We are looking for experienced climbers, qualified drone operators and volunteers who can help.">
+<style>
+  :root{
+    --ink:#000000;
+    --paper:#ffffff;
+    --card:#ffffff;
+    --line:#000000;
+    --muted:#444444;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Georgia,"Times New Roman",Times,serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:#000;text-underline-offset:2px}
+
+  /* Top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:#fff;
+    color:#000;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;
+    gap:12px;
+    border-bottom:2px solid #000;
+  }
+  .brand{font-weight:700;letter-spacing:.02em;font-size:16px}
+  .brand small{display:block;font-weight:400;font-style:italic;color:var(--muted);font-size:12px}
+  .tabs{display:flex;gap:6px}
+  .tabs button{
+    font-family:inherit;font-weight:700;font-size:14px;
+    border:1px solid #000;
+    background:#fff;color:#000;
+    padding:8px 16px;border-radius:0;cursor:pointer;
+  }
+  .tabs button.active{background:#000;color:#fff}
+
+  .wrap{max-width:820px;margin:0 auto;padding:28px 18px 80px}
+
+  /* Hero */
+  .hero{
+    background:#fff;
+    border:none;
+    border-bottom:2px solid #000;
+    border-radius:0;
+    padding:8px 0 24px;
+    margin-bottom:28px;
+  }
+  .hero .tag{
+    display:inline-block;background:#fff;color:#000;border:1px solid #000;
+    font-weight:700;font-size:12px;letter-spacing:.06em;
+    padding:4px 10px;border-radius:0;text-transform:uppercase;
+  }
+  .hero h1{font-size:34px;margin:16px 0 10px;line-height:1.15;font-weight:700}
+  .hero p.lead{font-size:20px;margin:0 0 8px}
+  .meta{color:var(--muted);font-size:15px;font-style:italic}
+
+  .callbtn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#000;color:#fff;text-decoration:none;
+    font-weight:700;font-size:19px;
+    padding:14px 24px;border-radius:0;margin-top:16px;
+  }
+  .callbtn small{font-weight:400;font-style:italic;opacity:.85;font-size:13px;display:block}
+
+  /* Cards / sections */
+  section.block{
+    background:#fff;
+    border:none;
+    border-top:1px solid #000;
+    border-radius:0;
+    padding:22px 0;
+    margin-bottom:8px;
+  }
+  section.block h2{
+    margin:0 0 6px;font-size:23px;display:flex;align-items:center;gap:10px;font-weight:700;
+  }
+  section.block h2 .dot{display:none}
+  section.block .sub{color:var(--muted);font-size:15px;font-style:italic;margin:0 0 16px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .need{
+    border:1px solid #000;border-radius:0;padding:16px;background:#fff;
+  }
+  .need h3{margin:0 0 8px;font-size:17px;font-weight:700}
+  .need ul{margin:0;padding-left:20px;font-size:15px;color:#000}
+  .need ul li{margin:3px 0}
+
+  ul.clean{list-style:none;padding:0;margin:0}
+  ul.clean li{padding:8px 0;border-bottom:1px solid #ddd;font-size:16px}
+  ul.clean li:last-child{border-bottom:0}
+
+  .pill{display:inline-block;background:#fff;color:#000;border:1px solid #000;border-radius:0;padding:4px 10px;font-size:13px;font-weight:700;margin:3px 5px 3px 0}
+
+  .notice{
+    background:#fff;border:1px solid #000;border-left:4px solid #000;
+    border-radius:0;padding:12px 16px;font-size:15px;margin-top:14px;color:#000;font-style:italic;
+  }
+  .notice.ok{background:#f4f4f4}
+
+  /* Private gate */
+  #private{display:none}
+  .gate{max-width:440px;margin:70px auto;background:#fff;border:1px solid #000;border-radius:0;padding:30px;text-align:center}
+  .gate input{font-family:inherit;padding:12px;border:1px solid #000;border-radius:0;width:100%;margin:14px 0;font-size:16px}
+  .gate button{font-family:inherit;font-weight:700;background:#000;color:#fff;border:0;padding:12px 18px;border-radius:0;cursor:pointer;width:100%;font-size:16px}
+  .gate .err{color:#000;font-weight:700;font-size:14px;min-height:18px}
+
+  /* Strategy */
+  .role-tree{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:#fff;color:#000;border:1px solid #000;padding:16px;border-radius:0;white-space:pre;overflow:auto}
+
+  .check li{list-style:none}
+  .check ul{padding-left:0}
+  .check label{display:flex;gap:10px;align-items:flex-start;padding:5px 0;font-size:16px;cursor:pointer}
+  .check input{margin-top:6px;width:16px;height:16px;accent-color:#000}
+
+  .twocol{columns:2;column-gap:28px}
+  @media(max-width:640px){.twocol{columns:1}.hero h1{font-size:27px}.tabs button{padding:7px 12px}}
+
+  .copybox{position:relative;background:#fff;border:1px solid #000;border-radius:0;padding:16px 16px;font-size:15px;white-space:pre-wrap;font-style:italic}
+  .copybtn{position:absolute;top:8px;right:8px;font-family:inherit;font-size:12px;font-weight:700;background:#000;color:#fff;border:0;border-radius:0;padding:6px 12px;cursor:pointer;font-style:normal}
+
+  footer{max-width:820px;margin:0 auto;padding:0 18px 40px;color:var(--muted);font-size:14px;font-style:italic;border-top:1px solid #000;padding-top:20px}
+  .editnote{background:#f4f4f4;border:1px solid #000;border-radius:0;padding:10px 12px;font-size:12px;color:#000;margin-top:12px;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">FIND GREGOR<small>Ogwen Valley search coordination</small></div>
+  <div class="tabs">
+    <button id="tab-public" class="active" onclick="showTab('public')">Public</button>
+    <button id="tab-private" onclick="showTab('private')">Team</button>
+  </div>
+</div>
+
+<!-- ============ PUBLIC ============ -->
+<div id="public">
+<div class="wrap">
+
+  <div class="hero">
+    <span class="tag">Active search — please share</span>
+    <h1>Gregor remains missing in the Ogwen valley</h1>
+    <p class="lead">We are looking for experienced climbers and qualified drone operators who may be able to assist today's search.</p>
+    <p class="meta">If you can help, or know someone who can, please get in touch. Please only share confirmed information and avoid speculation.</p>
+    <a class="callbtn" href="tel:07825233038">Call Clare<small>07825 233038 — tap to call</small></a>
+  </div>
+
+  <section class="block" id="latest">
+    <h2><span class="dot"></span>Latest confirmed update</h2>
+    <p class="sub">Updated by the information team. Confirmed details only.</p>
+    <ul class="clean">
+      <li><strong>Status:</strong> Search ongoing. Volunteers being coordinated.</li>
+      <li><strong>Area:</strong> Ogwen valley, Eryri (Snowdonia), North Wales.</li>
+      <li><strong>Last confirmed sighting:</strong> [to be filled in by information team]</li>
+      <li><strong>Today's focus:</strong> [to be filled in by information team]</li>
+    </ul>
+    <div class="notice">Please do not self deploy to the mountain without checking in first. Uncoordinated searchers can put themselves at risk and slow the operation. Contact Clare before heading out.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="dot"></span>Who we need today</h2>
+    <p class="sub">Recruiting only people who can genuinely help the search.</p>
+    <div class="grid">
+      <div class="need">
+        <h3>Experienced mountain people</h3>
+        <ul>
+          <li>Mountain guides and leaders</li>
+          <li>Climbers and scramblers</li>
+          <li>Winter mountaineers</li>
+          <li>Cave rescue members</li>
+          <li>Outdoor instructors</li>
+          <li>Fell runners</li>
+          <li>Local hill walkers who know the area</li>
+        </ul>
+      </div>
+      <div class="need">
+        <h3>Drone operators (priority)</h3>
+        <ul>
+          <li>Thermal camera operators</li>
+          <li>DJI Mavic 3 Thermal</li>
+          <li>DJI Matrice series</li>
+          <li>Search and rescue drone pilots</li>
+          <li>CAA qualified operators</li>
+          <li>Experienced in mountain flying</li>
+        </ul>
+      </div>
+      <div class="need">
+        <h3>Local knowledge</h3>
+        <ul>
+          <li>Farmers and rangers</li>
+          <li>Quarry workers</li>
+          <li>Gamekeepers</li>
+          <li>Regular Ogwen climbers</li>
+          <li>Local walkers</li>
+          <li>Mountain photographers</li>
+        </ul>
+      </div>
+      <div class="need">
+        <h3>Supplies and support</h3>
+        <ul>
+          <li>Food and hot drinks for volunteers</li>
+          <li>Water and snacks</li>
+          <li>Power banks and charging</li>
+          <li>Shelter, gazebo, chairs</li>
+          <li>Blankets and dry clothing</li>
+          <li>High vis vests</li>
+        </ul>
+      </div>
+    </div>
+    <div class="notice ok">If you can bring food, hot drinks or supplies to the volunteer base, please message Clare first so we can direct you to the right place.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="dot"></span>How you can help right now</h2>
+    <ul class="clean">
+      <li><strong>Are you an experienced climber or scrambler?</strong> Contact Clare to be coordinated into the search safely.</li>
+      <li><strong>Are you a qualified drone operator, ideally with thermal?</strong> We urgently want to hear from you, or you can stand by for tasking.</li>
+      <li><strong>Can you bring food, hot drinks or supplies?</strong> Message first so we send you to the right base.</li>
+      <li><strong>Can you share this appeal?</strong> Please share to local mountain, climbing and community groups.</li>
+    </ul>
+    <a class="callbtn" href="tel:07825233038">Call Clare<small>07825 233038</small></a>
+    <a class="callbtn" href="https://chat.whatsapp.com/IkFumizmzzz1YU1Uq1JuYA?mode=gi_t" target="_blank" rel="noopener" style="margin-left:8px">Join the WhatsApp group<small>Coordination group for volunteers</small></a>
+  </section>
+
+  <section class="block">
+    <h2><span class="dot"></span>Please help us responsibly</h2>
+    <ul class="clean">
+      <li>Share only confirmed information. Avoid speculation.</li>
+      <li>Do not contact Mountain Rescue or Police control directly with sightings unless it is an emergency. For an emergency call 999 and ask for Police, then Mountain Rescue.</li>
+      <li>Respect the family's privacy. Please do not approach the family directly.</li>
+      <li>Do not travel to the mountain to search without being coordinated first.</li>
+    </ul>
+  </section>
+
+</div>
+</div>
+
+<!-- ============ PRIVATE ============ -->
+<div id="private">
+  <!-- Gate removed: team section open so everyone can view it -->
+  <div id="gate" class="gate" style="display:none">
+    <input id="pw" type="password" style="display:none">
+  </div>
+
+  <!-- Strategy content -->
+  <div id="strategy" class="wrap" style="display:block">
+
+    <div class="hero">
+      <span class="tag">Team coordination</span>
+      <h1 style="font-size:24px">Search coordination strategy</h1>
+      <p class="meta">Working playbook for the coordination team. Keep the live information document and map updated. Rotate volunteers every few hours and check on everyone's wellbeing.</p>
+    </div>
+
+    <section class="block">
+      <h2><span class="dot"></span>Team structure</h2>
+      <div class="role-tree">SEARCH LEAD
+│
+├── Operations
+├── Volunteer Coordinator
+├── Media
+├── Logistics
+├── Family Support
+├── Information &amp; Maps
+├── Drone Coordination
+└── Community Outreach</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Search operations (highest priority)</h2>
+      <p class="sub">Ensure every useful resource reaches the search coordinator. Assign one person to liaise with Police, Mountain Rescue, and the family on the mountain.</p>
+      <h3 style="font-size:15px;margin:6px 0">Ask every 2 to 3 hours</h3>
+      <ul class="clean">
+        <li>What areas are currently being searched?</li>
+        <li>What areas remain outstanding?</li>
+        <li>Are there any specialist skills you need?</li>
+        <li>Can experienced climbers be deployed?</li>
+        <li>Are drone operators needed, or should they stand by?</li>
+        <li>Are there any weather or helicopter restrictions today?</li>
+        <li>Is there anything the public can do that would genuinely help?</li>
+        <li>Are there any areas volunteers should avoid?</li>
+        <li>Is there anything the community can source that would assist?</li>
+      </ul>
+      <div class="notice">One person maintains a live map showing: searched areas, areas currently being searched, outstanding areas, volunteer locations, drone coverage, and search team locations where appropriate.</div>
+      <p style="font-size:14px;margin:12px 0 0"><strong>Live map links:</strong> add your shared map here, for example a Google My Maps or what3words board.</p>
+      <ul class="clean">
+        <li>Live map: [paste shared map link]</li>
+        <li>what3words of base: [paste]</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Community recruitment</h2>
+      <p class="sub">Create one central WhatsApp group. Recruit only people who are genuinely useful.</p>
+      <ul class="clean">
+        <li>Central WhatsApp group: <a href="https://chat.whatsapp.com/IkFumizmzzz1YU1Uq1JuYA?mode=gi_t" target="_blank" rel="noopener">join here</a></li>
+      </ul>
+      <a class="callbtn" href="https://chat.whatsapp.com/IkFumizmzzz1YU1Uq1JuYA?mode=gi_t" target="_blank" rel="noopener">Join the WhatsApp group<small>Central coordination group</small></a>
+      <div class="grid" style="margin-top:12px">
+        <div class="need">
+          <h3>Experienced mountain people</h3>
+          <ul><li>Mountain guides</li><li>Climbers</li><li>Scramblers</li><li>Winter mountaineers</li><li>Cave rescue members</li><li>Outdoor instructors</li><li>Mountain leaders</li><li>Fell runners</li><li>Local hill walkers</li></ul>
+        </div>
+        <div class="need">
+          <h3>Drone operators (prioritise)</h3>
+          <ul><li>Thermal camera operators</li><li>DJI Mavic 3 Thermal</li><li>DJI Matrice series</li><li>Search and rescue drone pilots</li><li>CAA qualified operators</li><li>Mountain flying experience</li></ul>
+        </div>
+        <div class="need">
+          <h3>Local knowledge</h3>
+          <ul><li>Farmers</li><li>Quarry workers</li><li>Rangers</li><li>Gamekeepers</li><li>Regular Ogwen climbers</li><li>Local walkers</li><li>Mountain photographers</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Drone coordination</h2>
+      <p class="sub">All drone flying must be cleared with the search coordinator and Mountain Rescue before take off, to keep clear of the rescue helicopter and other aircraft. Never self deploy a drone over the search area.</p>
+
+      <h3 style="font-size:17px;margin:6px 0">Asset register check</h3>
+      <p class="sub" style="margin-bottom:8px">For every drone operator who offers, record the following before tasking. Tick each step.</p>
+      <div class="check" id="dronereg"></div>
+      <div class="notice">Keep a simple list: operator name, contact number, drone model, thermal yes or no, CAA status, current location, and availability today. Share this list with Mountain Rescue so they can task the right asset.</div>
+
+      <h3 style="font-size:17px;margin:18px 0 6px">Major drone operators in Wales</h3>
+      <p class="sub" style="margin-bottom:10px">Contact to ask about thermal capability and availability today. Anyone deployed must be coordinated through the search coordinator and Mountain Rescue.</p>
+      <div class="grid">
+        <div class="need">
+          <h3>Official search and rescue</h3>
+          <ul>
+            <li>HM Coastguard SAR drone unit, Caernarfon Airport (via 999 Coastguard)</li>
+            <li>North Wales Police drone unit (via Police)</li>
+            <li>Mountain Rescue team drone operators (via the team on scene)</li>
+          </ul>
+        </div>
+        <div class="need">
+          <h3>North Wales commercial operators</h3>
+          <ul>
+            <li>Osprey sUAS — North Wales, thermal, CAA (ospreysuas.com)</li>
+            <li>Avian TUAV — North Wales and North West, thermal (aviantuav.com)</li>
+            <li>Aerialworx — Wales, DJI H20T thermal (aerialworx.co.uk)</li>
+          </ul>
+        </div>
+        <div class="need">
+          <h3>Wider Wales and UK</h3>
+          <ul>
+            <li>Drone Media Imaging — UK wide incl Wales, radiometric thermal (dronemediaimaging.co.uk)</li>
+            <li>Drone Survey Cardiff — South Wales, thermal (dronesurveycardiff.com)</li>
+          </ul>
+        </div>
+        <div class="need">
+          <h3>Find more operators fast</h3>
+          <ul>
+            <li>Drone Safe Register (dronesaferegister.org.uk)</li>
+            <li>Drone Pilots UK — North Wales (dronepilotsuk.co.uk)</li>
+            <li>HireDronePilot — North Wales (hiredronepilot.uk)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="notice ok">Prioritise thermal capable operators (DJI Mavic 3 Thermal, DJI Matrice, DJI H20T) with mountain flying experience. Please check details and current contact numbers before relying on them.</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Press and media</h2>
+      <p class="sub">One person manages communications. Confirmed updates only.</p>
+      <div>
+        <span class="pill">BBC Wales</span><span class="pill">ITV Wales</span><span class="pill">Daily Post</span><span class="pill">North Wales Live</span><span class="pill">Local newspapers</span><span class="pill">Local radio</span><span class="pill">Local Facebook groups</span><span class="pill">Mountain groups</span><span class="pill">Climbing pages</span><span class="pill">Outdoor influencers</span>
+      </div>
+      <h3 style="font-size:15px;margin:16px 0 6px">Approved press message</h3>
+      <div class="copybox" id="msg-press">Gregor remains missing.
+
+We are looking for experienced climbers and qualified drone operators who may be able to assist today's search.
+
+If you can help, or know someone who can, please contact Clare on 07825 233038.
+
+Please only share confirmed information and avoid speculation.<button class="copybtn" onclick="copyBox('msg-press')">Copy</button></div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Logistics checklist</h2>
+      <p class="sub">Assign one person solely to logistics. Rotate volunteers every few hours. Tick as covered.</p>
+      <div class="check twocol" id="logi"></div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Political and resource escalation</h2>
+      <p class="sub">Contact senior decision makers respectfully.</p>
+      <div>
+        <span class="pill">North Wales Police senior command</span><span class="pill">Police &amp; Crime Commissioner</span><span class="pill">Local MP</span><span class="pill">Members of the Senedd (MS)</span><span class="pill">Local councillors</span>
+      </div>
+      <h3 style="font-size:15px;margin:16px 0 6px">Approved escalation message</h3>
+      <div class="copybox" id="msg-esc">We are incredibly grateful for the ongoing work of North Wales Police, Mountain Rescue and all volunteers.
+
+We respectfully ask that every available aerial and specialist search resource is considered while Gregor remains missing.
+
+If additional specialist drone capability or other search resources are available, we would be grateful if they could be assessed for deployment.<button class="copybtn" onclick="copyBox('msg-esc')">Copy</button></div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Contact today</h2>
+      <p class="sub">Outdoor organisations, businesses and universities. Found through followers and local networks.</p>
+      <div class="grid">
+        <div class="need">
+          <h3>Outdoor organisations</h3>
+          <ul><li>British Mountaineering Council</li><li>Mountain Training Cymru</li><li>Local climbing clubs</li><li>Ogwen Mountain Rescue supporters</li><li>Llanberis Mountain Rescue contacts (appropriate channels)</li><li>National Trust rangers</li><li>Outdoor instructors</li></ul>
+        </div>
+        <div class="need">
+          <h3>Businesses</h3>
+          <ul><li>Cotswold Outdoor</li><li>Joe Brown Shops</li><li>Ellis Brigham</li><li>Alpkit</li><li>V12 Outdoor</li><li>Beacon Climbing Centre</li><li>Zip World</li><li>Local outdoor hire companies</li></ul>
+        </div>
+        <div class="need">
+          <h3>Universities</h3>
+          <ul><li>Bangor University Outdoor Society</li><li>Bangor Mountain Club</li><li>Climbing Society</li><li>Walking Society</li><li>Geography Department</li><li>Adventure Sports courses</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Social media</h2>
+      <p class="sub">One person manages all channels (Clare). Include:</p>
+      <ul class="clean">
+        <li>Current search status</li>
+        <li>Latest confirmed location</li>
+        <li>Who is needed</li>
+        <li>Contact details</li>
+        <li>Confirmed updates only</li>
+        <li>Requests for specialist volunteers</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Family support team</h2>
+      <p class="sub">Dedicated people to support the family. Check in on everyone's wellbeing.</p>
+      <div class="check twocol" id="family"></div>
+      <div class="notice">Support Gregor's wife so she is never left managing everything alone. Look after Ruairidh and Finn. Organise rest breaks.</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Information team — live document</h2>
+      <p class="sub">Maintain one live document containing all of the below. Ask Mountain Rescue to provide information to us so this stays accurate.</p>
+      <div class="check twocol" id="info"></div>
+    </section>
+
+    <section class="block">
+      <h2><span class="dot"></span>Key numbers</h2>
+      <ul class="clean">
+        <li><strong>Clare (coordination):</strong> <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Emergency:</strong> 999 — ask for Police, then Mountain Rescue</li>
+        <li><strong>Search lead:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Operations:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Drone coordination:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Logistics:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Media:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+        <li><strong>Family support:</strong> Clare — <a href="tel:07825233038">07825 233038</a></li>
+      </ul>
+    </section>
+
+  </div>
+</div>
+
+<footer>
+  Built to help coordinate the search for Gregor in the Ogwen valley. Keep messaging to confirmed information only. In an emergency call 999.
+</footer>
+
+<script>
+  // ====== EDIT ME: team passcode ======
+  const TEAM_PASSCODE = "ogwen";
+  // ====================================
+
+  function showTab(which){
+    document.getElementById('public').style.display  = which==='public' ? 'block':'none';
+    document.getElementById('private').style.display = which==='private'? 'block':'none';
+    document.getElementById('tab-public').classList.toggle('active', which==='public');
+    document.getElementById('tab-private').classList.toggle('active', which==='private');
+    window.scrollTo(0,0);
+  }
+
+  function checkPw(){
+    const v = document.getElementById('pw').value.trim().toLowerCase();
+    if(v === TEAM_PASSCODE.toLowerCase()){
+      document.getElementById('gate').style.display='none';
+      document.getElementById('strategy').style.display='block';
+      try{ sessionStorage.setItem('gregor_team','1'); }catch(e){}
+    } else {
+      document.getElementById('pwerr').textContent='Incorrect passcode';
+    }
+  }
+
+  // remember within session
+  try{ if(sessionStorage.getItem('gregor_team')==='1'){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('strategy').style.display='block';
+  }}catch(e){}
+
+  // checklists
+  function buildChecks(id, items){
+    const el=document.getElementById(id);
+    const ul=document.createElement('ul');
+    items.forEach((t,i)=>{
+      const li=document.createElement('li');
+      const lab=document.createElement('label');
+      const cb=document.createElement('input');cb.type='checkbox';
+      const key='chk_'+id+'_'+i;
+      try{ if(localStorage.getItem(key)==='1') cb.checked=true; }catch(e){}
+      cb.addEventListener('change',()=>{ try{localStorage.setItem(key,cb.checked?'1':'0');}catch(e){} });
+      lab.appendChild(cb);lab.appendChild(document.createTextNode(' '+t));
+      li.appendChild(lab);ul.appendChild(li);
+    });
+    el.appendChild(ul);
+  }
+  buildChecks('logi',["Food","Water","Tea & coffee","Snacks","Charging station","Extension leads","Power banks","First aid","High-vis vests","Parking","Toilets","Accommodation","Petrol / fuel","Fuel cards","Shelter (gazebo)","Chairs","Blankets","Dry clothing"]);
+  buildChecks('family',["Food","Water","Accommodation","Phone charging","Transport","Managing media enquiries","Looking after Ruairidh","Looking after Finn","Supporting Gregor's wife","Organising rest breaks","Checking on everyone's wellbeing"]);
+  buildChecks('info',["Timeline","Maps","Last confirmed sighting","Photographs","Equipment carried","Clothing worn","Phone status","Weather updates","Volunteer contacts","Search updates","Drone operators","Press contacts","Key phone numbers","Decisions made","Action log"]);
+  buildChecks('dronereg',["Operator name and contact number recorded","Drone model recorded","Thermal camera? (yes / no)","CAA registration / operator ID checked","Insurance confirmed","Current location and travel time","Battery / endurance and spare batteries","Availability window today","Mountain flying experience confirmed","Cleared with coordinator and Mountain Rescue before flight","Assigned a specific area (no overlap with helicopter)"]);
+
+  function copyBox(id){
+    const box=document.getElementById(id);
+    const text=Array.from(box.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      const b=box.querySelector('.copybtn');const o=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=o,1500);
+    });
+  }
+</script>
+</body>
+</html>
